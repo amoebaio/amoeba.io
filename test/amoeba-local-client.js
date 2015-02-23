@@ -1,5 +1,7 @@
 var assert = require("assert");
-var Amoeba = require("../lib/amoeba.io").Amoeba;
+var Amoeba = require("../lib/amoeba");
+var LocalClient = require("../lib/amoeba-local-client");
+
 Auth = function() {};
 
 Auth.prototype.login = function(data, callback) {
