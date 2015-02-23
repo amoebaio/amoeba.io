@@ -1,6 +1,6 @@
 {
     "name": "amoeba.io",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "description": "Distributed, modular request/responce/event system",
     "main": "index.js",
     "repository": {
