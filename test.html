@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Browser Amoeba test</title>
+    <meta charset="utf-8">
+
+    <link rel="stylesheet" href="http://code.jquery.com/qunit/qunit-1.17.1.css">
+
+
+    <script type="text/javascript" src="lib/browser.amoeba.js"></script>
+
+    <script type="text/javascript">
+    Auth = function() {};
+
+    Auth.prototype.login = function(data, callback) {
+        if (data.login == "admin" && data.password == "admin") {
+            callback(null, {
+                "res": "login ok"
+            });
+        } else {
+            callback({
+                "res": "login fail"
+            }, null);
+        }
+    };
+    var amoeba = new Amoeba();
+    amoeba.service("auth", new LocalClient(new Auth()));
+    </script>
+
+
+</head>
+
+<body>
+    <div id="qunit"></div>
+    <div id="qunit-fixture"></div>
+    <script src="http://code.jquery.com/qunit/qunit-1.17.1.js"></script>
+    <script src="test/qunit.amoeba.test.js"></script>
+</body>
+
+</html>
