@@ -1,5 +1,5 @@
 var assert = require("assert");
-var Amoeba = require("../lib/amoeba").Amoeba;
+var Amoeba = require("../lib/amoeba.io").Amoeba;
 
 describe('Amoeba', function() {
 

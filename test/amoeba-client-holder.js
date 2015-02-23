@@ -1,7 +1,7 @@
 var assert = require("assert");
-var Amoeba = require("../lib/amoeba").Amoeba;
-var ClientHolder = require("../lib/amoeba").ClientHolder;
-var LocalClient = require("../lib/amoeba").LocalClient;
+var Amoeba = require("../lib/amoeba.io").Amoeba;
+var ClientHolder = require("../lib/amoeba.io").ClientHolder;
+var LocalClient = require("../lib/amoeba.io").LocalClient;
 
 describe('ClientHolder', function() {
     var amoeba;

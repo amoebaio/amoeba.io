@@ -1,5 +1,5 @@
 var assert = require("assert");
-var Amoeba = require("../lib/amoeba").Amoeba;
+var Amoeba = require("../lib/amoeba.io").Amoeba;
 Auth = function() {};
 
 Auth.prototype.login = function(data, callback) {
