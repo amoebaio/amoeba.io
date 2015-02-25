@@ -10,8 +10,28 @@ describe('ClientHolder', function() {
 
     it('#name', function() {
         amoeba.service("auth", {
+            scopeTest: function(){},
             invoke: function() {}
         });
+        assert.equal("auth", amoeba.service("auth").service);
+    });
+
+    it('#invoke scope test', function(done) {
+        amoeba.service("auth", {
+            scopeTest: function(callback){
+                callback(null, "ok");
+            },
+            invoke: function(service, method, params, callback) {
+                this.scopeTest(callback);
+            }
+        });
+        amoeba.service("auth").invoke("test", {
+            p1: 1,
+            p2: 2
+        }, function(err, data) {
+            assert.equal(data, "ok");
+            done();
+        });        
         assert.equal("auth", amoeba.service("auth").service);
     });
 
