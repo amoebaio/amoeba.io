@@ -67,7 +67,7 @@ var ClientHolder=require('./amoeba-client-holder');
 
 Amoeba = function() {
     this.servers = [];
-    this.serviceHolders = [];
+    this.serviceHolders = {};
 };
 
 /**
@@ -76,7 +76,11 @@ Amoeba = function() {
  */
 Amoeba.prototype.service = function() {
     if (arguments.length == 1) {
-        return this.serviceHolders[arguments[0]];
+        if(this.serviceHolders[arguments[0]]){
+            return this.serviceHolders[arguments[0]];
+        }else{
+            throw  new Error("Service '"+arguments[0]+"' not found");
+        }
     } else if (arguments.length == 2) {
         var holder = new ClientHolder(arguments[1], arguments[0]);
         this.serviceHolders[arguments[0]] = holder;
