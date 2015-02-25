@@ -89,7 +89,7 @@ Amoeba.prototype.service = function() {
 };
 
 Amoeba.prototype.server = function(server) {
-    server.eventer(this);
+    server.amoeba(this);
     this.servers.push(server);
 };
 
