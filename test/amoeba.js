@@ -8,15 +8,15 @@ describe('Amoeba', function() {
         amoeba = new Amoeba();
     });
 
-    it('#service', function() {
-		amoeba.service("test",{});
-		assert.ok(amoeba.service("test"));
+    it('#use', function() {
+		amoeba.use("test",{});
+		assert.ok(amoeba.use("test"));
     });
 
-    it('#service not found', function(done) {
-		amoeba.service("test",{});
+    it('#use not found', function(done) {
+		amoeba.use("test",{});
 		try{
-			amoeba.service("tests");
+			amoeba.use("tests");
 			assert.ok(false, "Need to throw exception");
 		}catch(e){
 			assert.equal("Service 'tests' not found", e.message);

@@ -9,38 +9,38 @@ describe('ClientHolder', function() {
     });
 
     it('#name', function() {
-        amoeba.service("auth", {
+        amoeba.use("auth", {
             scopeTest: function(){},
             invoke: function() {}
         });
-        assert.equal("auth", amoeba.service("auth").service);
+        assert.equal("auth", amoeba.use("auth").use);
     });
 
     it('#invoke scope test', function(done) {
-        amoeba.service("auth", {
+        amoeba.use("auth", {
             scopeTest: function(callback){
                 callback(null, "ok");
             },
-            invoke: function(service, method, params, callback) {
+            invoke: function(use, method, params, callback) {
                 this.scopeTest(callback);
             }
         });
-        amoeba.service("auth").invoke("test", {
+        amoeba.use("auth").invoke("test", {
             p1: 1,
             p2: 2
         }, function(err, data) {
             assert.equal(data, "ok");
             done();
         });        
-        assert.equal("auth", amoeba.service("auth").service);
+        assert.equal("auth", amoeba.use("auth").use);
     });
 
     it('#invoke', function(done) {
-        amoeba.service("auth", {
-            invoke: function(service, method, params, callback) {
+        amoeba.use("auth", {
+            invoke: function(use, method, params, callback) {
                 assert.equal(params.p2, 2);
                 assert.equal(method, "test");
-                assert.equal(service, "auth");
+                assert.equal(use, "auth");
                 if (params.p1 == 1) {
                     callback(null, "ok");
                 } else {
@@ -48,13 +48,13 @@ describe('ClientHolder', function() {
                 }
             }
         });
-        amoeba.service("auth").invoke("test", {
+        amoeba.use("auth").invoke("test", {
             p1: 1,
             p2: 2
         }, function(err, data) {
             assert.equal(data, "ok");
         });
-        amoeba.service("auth").invoke("test", {
+        amoeba.use("auth").invoke("test", {
             p1: 2,
             p2: 2
         }, function(err, data) {
@@ -65,20 +65,20 @@ describe('ClientHolder', function() {
     });
 
     it('#behaviors', function() {
-        amoeba.service("auth", {
+        amoeba.use("auth", {
             invoke: function() {}
         });
-        amoeba.service("auth").behavior("before_invoke", function(data, next) {});
-        amoeba.service("auth").behavior("before_invoke", function(data, next) {});
-        amoeba.service("auth").behavior("after_invoke", function(data, next) {});
-        assert.equal(amoeba.service("auth").behaviors("before_invoke").length, 2);
-        assert.equal(amoeba.service("auth").behaviors("after_invoke").length, 1);
+        amoeba.use("auth").behavior("before_invoke", function(data, next) {});
+        amoeba.use("auth").behavior("before_invoke", function(data, next) {});
+        amoeba.use("auth").behavior("after_invoke", function(data, next) {});
+        assert.equal(amoeba.use("auth").behaviors("before_invoke").length, 2);
+        assert.equal(amoeba.use("auth").behaviors("after_invoke").length, 1);
     });
 
     it('#invoke_behaviors', function(done) {
-        amoeba.service("auth", {
-            invoke: function(service, method, params, callback) {
-                assert.equal(service, "auth");
+        amoeba.use("auth", {
+            invoke: function(use, method, params, callback) {
+                assert.equal(use, "auth");
                 assert.equal(method, "test");
                 if (params.p1 == 7) {
                     callback(null, {
@@ -87,25 +87,25 @@ describe('ClientHolder', function() {
                 }
             }
         });
-        amoeba.service("auth").behavior("before_invoke", function(data, next) {
+        amoeba.use("auth").behavior("before_invoke", function(data, next) {
             if (data.params.p1 == 1) {
                 data.params.p1 = 4;
             }
             next();
         });
-        amoeba.service("auth").behavior("before_invoke", function(data, next) {
+        amoeba.use("auth").behavior("before_invoke", function(data, next) {
             if (data.params.p1 == 4) {
                 data.params.p1 = 7;
             }
             next();
         });
-        amoeba.service("auth").behavior("after_invoke", function(data, next) {
+        amoeba.use("auth").behavior("after_invoke", function(data, next) {
             if (data.result.some == "data") {
                 data.result.complete = 1;
             }
             next();
         });
-        amoeba.service("auth").invoke("test", {
+        amoeba.use("auth").invoke("test", {
             p1: 1,
             p2: 2
         }, function(err, result) {
