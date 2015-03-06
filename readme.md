@@ -38,7 +38,7 @@ Auth.prototype.login = function(data, callback) {
 //Create amoeba instance
 amoeba = new Amoeba();
 //Add service to amoeba
-amoeba.service("auth", new LocalClient(new Auth()));
+amoeba.use("auth", new LocalClient(new Auth()));
 
 //Create socket server
 var port = "8090";
@@ -71,8 +71,8 @@ Create client
       var socket = io('http://localhost:8090');
       var amoeba = new Amoeba();
       socket.on('connect', function() {
-        amoeba.service("auth", new SocketClient(socket));
-        amoeba.service("auth").invoke("login", {
+        amoeba.use("auth", new SocketClient(socket));
+        amoeba.use("auth").invoke("login", {
                 login: 'admin',
                 password: 'pass'
             }, function(err, data) {
