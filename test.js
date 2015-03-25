@@ -1,11 +1,11 @@
 QUnit.test("Amoeba invoke", function(assert) {
     var amoeba = new Amoeba();
     amoeba.use("auth", {
-        "invoke": function(use, method, data, callback) {
-            assert.equal(use, "auth");
-            assert.equal(method, "login");
-            assert.equal(data.login, "admin");
-            assert.equal(data.password, "admin");
+        "invoke": function(context, callback) {
+            assert.equal(context.request.use, "auth");
+            assert.equal(context.request.method, "login");
+            assert.equal(context.request.params.login, "admin");
+            assert.equal(context.request.params.password, "admin");
         }
     });
 
@@ -29,7 +29,7 @@ QUnit.test("Invoke scope test", function(assert) {
         scopeTest: function(callback) {
             callback(null, "ok");
         },
-        invoke: function(use, method, params, callback) {
+        invoke: function(context, callback) {
             this.scopeTest(callback);
         }
     });
