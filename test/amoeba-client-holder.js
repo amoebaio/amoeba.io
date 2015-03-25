@@ -41,7 +41,7 @@ describe('ClientHolder', function() {
             invoke: function(context, callback) {
                 assert.equal(context.request.method, "test");
                 assert.equal(context.request.use, "auth");
-                assert.deepEqual(context.request.params, {});
+                assert.equal(typeof(context.request.params), "undefined");
                 callback();
                 done();
             }
@@ -70,7 +70,7 @@ describe('ClientHolder', function() {
             invoke: function(context, callback) {
                 assert.equal(context.request.method, "test");
                 assert.equal(context.request.use, "auth");
-                assert.deepEqual(context.request.params, {});
+                assert.equal(typeof(context.request.params), "undefined");
                 callback(null, "ok");
             }
         });

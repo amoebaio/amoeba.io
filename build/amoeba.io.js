@@ -20,30 +20,12 @@ ClientHolder.prototype.handlers = function(type) {
 };
 
 ClientHolder.prototype.invoke = function(method) {
-
-    if (arguments.length == 1) {
-        params = {};
-        callback = function() {};
-    } else if (arguments.length == 2) {
-        if (typeof(arguments[1]) == "function") {
-            params = {};
-            callback = arguments[1];
-        } else {
-            params = arguments[1];
-            callback = function() {};
-        }
-    } else if (arguments.length == 3) {
-        params = arguments[1];
-        callback = arguments[2];
-    } else if (arguments.length > 3) {
-        throw new Error("More than 3 arguments received");
-    }
+    var self = this;
 
     var context = {
         request: {
             use: this.use,
-            method: method,
-            params: params
+            method: method
         },
         response: {
             error: null,
@@ -51,7 +33,23 @@ ClientHolder.prototype.invoke = function(method) {
         }
     };
 
-    var self = this;
+    if (arguments.length == 1) {
+        callback = function() {};
+    } else if (arguments.length == 2) {
+        if (typeof(arguments[1]) == "function") {
+            callback = arguments[1];
+        } else {
+            context.request.params = arguments[1];
+            callback = function() {};
+        }
+    } else if (arguments.length == 3) {
+        context.request.params = arguments[1];
+        callback = arguments[2];
+    } else if (arguments.length > 3) {
+        throw new Error("More than 3 arguments received");
+    }
+
+
     //create before_invoke chain
     var chain_bofore = new Chain(self.handlers("before_invoke"));
     chain_bofore.add(function(context, next){

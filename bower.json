@@ -1,7 +1,7 @@
 {
   "name": "amoeba.io",
   "main": "build/amoeba.io.js",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "homepage": "https://github.com/amoebaio/amoeba.io",
   "authors": [
     "Maksym Pomazan"

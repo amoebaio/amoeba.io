@@ -1,28 +1,7 @@
-QUnit.test("Amoeba invoke", function(assert) {
-    var amoeba = new Amoeba();
-    amoeba.use("auth", {
-        "invoke": function(context, callback) {
-            assert.equal(context.request.use, "auth");
-            assert.equal(context.request.method, "login");
-            assert.equal(context.request.params.login, "admin");
-            assert.equal(context.request.params.password, "admin");
-        }
-    });
-
-    amoeba.use("auth").invoke("login", {
-        login: 'admin',
-        password: 'admin'
-    }, function(err, data) {
-        assert.equal(err, null);
-        assert.equal(data.res, "login ok");
-    });
-
-});
-
 QUnit.test("Invoke scope test", function(assert) {
     var done = assert.async();
 
-    assert.expect( 1 );
+    assert.expect(1);
 
     var amoeba = new Amoeba();
     amoeba.use("auth", {
@@ -40,4 +19,91 @@ QUnit.test("Invoke scope test", function(assert) {
         assert.equal(data, "ok");
         done();
     });
+});
+
+
+
+QUnit.test("Invoke only method", function(assert) {
+    var done = assert.async();
+    assert.expect(3);
+    var amoeba = new Amoeba();
+    amoeba.use("auth", {
+        invoke: function(context, callback) {
+            assert.equal(context.request.method, "test");
+            assert.equal(context.request.use, "auth");
+            assert.equal(typeof(context.request.params), "undefined");
+            callback();
+            done();
+        }
+    });
+    amoeba.use("auth").invoke("test");
+});
+
+QUnit.test("Invoke method with params", function(assert) {
+    var done = assert.async();
+    assert.expect(3);
+    var amoeba = new Amoeba();
+
+    amoeba.use("auth", {
+        invoke: function(context, callback) {
+            assert.equal(context.request.method, "test");
+            assert.equal(context.request.use, "auth");
+            assert.equal(context.request.params.p1, "p2");
+            callback();
+            done();
+        }
+    });
+    amoeba.use("auth").invoke("test", {
+        "p1": "p2"
+    });
+});
+QUnit.test("Invoke method with callbacks", function(assert) {
+    var done = assert.async();
+    assert.expect(4);
+    var amoeba = new Amoeba();
+    amoeba.use("auth", {
+        invoke: function(context, callback) {
+            assert.equal(context.request.method, "test");
+            assert.equal(context.request.use, "auth");
+            assert.deepEqual(typeof(context.request.params), "undefined");
+            callback(null, "ok");
+        }
+    });
+    amoeba.use("auth").invoke("test", function(err, data) {
+        assert.equal(data, "ok");
+        done();
+    });
+});
+
+QUnit.test("Amoeba invoke", function(assert) {
+    var done = assert.async();
+
+    var amoeba = new Amoeba();
+
+    amoeba.use("auth", {
+        invoke: function(context, callback) {
+            assert.equal(context.request.params.p2, 2);
+            assert.equal(context.request.method, "test");
+            assert.equal(context.request.use, "auth");
+            if (context.request.params.p1 == 1) {
+                callback(null, "ok");
+            } else {
+                callback("error", null);
+            }
+        }
+    });
+    amoeba.use("auth").invoke("test", {
+        p1: 1,
+        p2: 2
+    }, function(err, data) {
+        assert.equal(data, "ok");
+    });
+    amoeba.use("auth").invoke("test", {
+        p1: 2,
+        p2: 2
+    }, function(err, data) {
+        assert.equal(err, "error");
+        done();
+    });
+
 });
