@@ -41,28 +41,42 @@ describe('ClientHolder', function() {
             invoke: function(context, callback) {
                 assert.equal(context.request.method, "test");
                 assert.equal(context.request.use, "auth");
+                assert.equal(typeof(callback), "undefined");
                 assert.equal(typeof(context.request.params), "undefined");
-                callback();
                 done();
             }
         });
         amoeba.use("auth").invoke("test");
     });
 
-
-    it('#invoke method with params', function(done) {
+    it('#invoke method with param', function(done) {
         amoeba.use("auth", {
             invoke: function(context, callback) {
                 assert.equal(context.request.method, "test");
                 assert.equal(context.request.use, "auth");
                 assert.equal(context.request.params.p1, "p2");
-                callback();
+                assert.equal(typeof(callback), "undefined");
                 done();
             }
         });
         amoeba.use("auth").invoke("test", {
             "p1": "p2"
         });
+    });
+
+    it('#invoke method with params', function(done) {
+        amoeba.use("auth", {
+            invoke: function(context, callback) {
+                assert.equal(context.request.method, "test");
+                assert.equal(context.request.use, "auth");
+                assert.equal(context.request.params[0], "1");
+                assert.equal(context.request.params[1], "2");
+                assert.equal(context.request.params[2], "3");
+                assert.equal(typeof(callback), "undefined");
+                done();
+            }
+        });
+        amoeba.use("auth").invoke("test", ["1", "2", "3"]);
     });
 
     it('#invoke method with callbacks', function(done) {

@@ -33,14 +33,13 @@ ClientHolder.prototype.invoke = function(method) {
         }
     };
 
-    if (arguments.length == 1) {
-        callback = function() {};
-    } else if (arguments.length == 2) {
+    var callback = null;
+
+    if (arguments.length == 2) {
         if (typeof(arguments[1]) == "function") {
             callback = arguments[1];
         } else {
             context.request.params = arguments[1];
-            callback = function() {};
         }
     } else if (arguments.length == 3) {
         context.request.params = arguments[1];
@@ -50,23 +49,33 @@ ClientHolder.prototype.invoke = function(method) {
     }
 
 
-    //create before_invoke chain
-    var chain_bofore = new Chain(self.handlers("before_invoke"));
-    chain_bofore.add(function(context, next){
-        self.client.invoke(context, function(error, result) {
-            context.response.error = error;
-            context.response.result = result;
-            next();            
-        });
-    });
-    chain_bofore.add(self.handlers("after_invoke"));
+    //Chain of responsibility
+    var chain = new Chain(self.handlers("before_invoke"));
+    chain.add(function(context, next) {
 
-    chain_bofore.start(context, function(context) {
-        //interrupted before_invoke
-        callback(context.response.error, context.response.result);
+        if (callback !== null) {
+            self.client.invoke(context, function(error, result) {
+                context.response.error = error;
+                context.response.result = result;
+                next();
+            });
+        } else {
+            self.client.invoke(context);
+            next();
+        }
+    });
+    chain.add(self.handlers("after_invoke"));
+
+    chain.start(context, function(context) {
+        //success
+        if (callback !== null) {
+            callback(context.response.error, context.response.result);
+        }
     }, function(context) {
-        //interrupted before_invoke
-        callback(context.response.error, context.response.result);
+        //interrupted
+        if (callback !== null) {
+            callback(context.response.error, context.response.result);
+        }
     });
 
 };
