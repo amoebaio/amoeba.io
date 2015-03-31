@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="favicon.ico">
+
+    <title>Index</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+<!-- Fixed navbar -->
+<nav class="navbar navbar-default">
+<div class="container">
+  <div class="navbar-header">
+    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+      <span class="sr-only">Toggle navigation</span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
+    <a class="navbar-brand" href="">Project name</a>
+  </div>
+  <div id="navbar" class="collapse navbar-collapse">
+    <ul class="nav navbar-nav">
+      
+        
+          <li ><a href="index.html">Home</a></li>
+        
+      
+        
+          <li class="active"><a href="docs.html">Docs</a></li>
+        
+      
+        
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Demo <span class="caret"></span></a>
+            <ul class="dropdown-menu" role="menu">
+              
+                <li><a href="demo_simple.html">Simple demo</a></li>
+              
+                <li><a href="demo_advanced.html">Advanced demo</a></li>
+              
+            </ul>
+          </li>
+        
+      
+
+    </ul>
+
+<form class="navbar-form navbar-right" role="search">
+<div class="">
+    <div class="input-group">
+      <input type="text" class="form-control" placeholder="Search for...">
+      <span class="input-group-btn">
+        <button class="btn btn-default" type="button">Search</button>
+      </span>
+    </div><!-- /input-group -->
+  </div><!-- /.col-lg-6 -->
+</form>
+
+  </div><!--/.nav-collapse -->
+</div>
+</nav>
+    
+
+<div class="container">
+
+<section>
+	<h1>Amoeba methods</h1>
+
+	<h2>use</h2>
+	Main method in amoeba is "use". It used for setting or getting services.
+	For adding service to amoeba call use method with 2 params. First param name or path to the object. Second param is object to set.
+	<pre>
+	amoeba.use("service_name", object);
+	</pre>
+	After object would be setted you can use get function. Call use with only 1 string param.
+	<pre>
+	amoeba.use("service_name");
+	</pre>
+
+	<h2>server</h2>
+	Server method used for setting or getting server object. For adding server to amoeba call use method with server object as param.
+	<pre>
+	amoeba.server(object);
+	</pre>
+
+	<h1>AmoebaClientHolder methods</h1>
+
+	<h2>invoke</h2>
+	<p>invoke method is used for executing service method. When using invoke method you do not need to worry about what service you use local or remote.
+	<pre>
+	amoeba.use("service_name").invoke("method"[, params, cllback]);
+	</pre>
+	
+	<h3>method</h3>
+	<p>Method is string param. Name of method that would be executed on service object.</p>
+	<h3>params</h3>
+	<p>You can call invoke method in 3 way</p>
+	<ul>
+    <li>without params
+	<pre>
+		amoeba.use("service").invoke("method");// calling service.method();
+		OR
+		amoeba.use("service").invoke("method", callback);// calling service.method(callback);
+	</pre>
+	</li>
+    <li>with single param
+	<pre>
+		amoeba.use("service").invoke("method", 4);// calling service.method(4);
+		OR
+		amoeba.use("service").invoke("method", 4, callback);// calling service.method(4, callback);
+	</pre>
+
+    </li>
+    <li>with multiple param
+		<pre>
+		amoeba.use("service").invoke("method", [4, 5, 6]);// calling service.method(4, 5, 6);
+		OR
+		amoeba.use("service").invoke("method", [4, 5, 6], callback);// calling service.method(4, 5, 6, callback);
+		</pre>
+	</li>
+</ul>
+
+	<h3>callback</h3>
+	<p>Your call back function need to be next interface</p>
+	<pre>
+		function(error, result){}
+	</pre>
+	<p>You can use invoke method without callback param. In this case amoeba will not wait for response from service. It is fast, but will not know about results of calling service.</p>
+
+	<h2>on</h2>
+	<pre>
+	amoeba.use("service").on("event", callback[, added_callback]);
+	</pre>
+	<p>on method is used for adding listener on your service. It can be really powerfull. Thru "on" method server can send events to client in any time not only by request.</p>
+	<h2>handler</h2>
+	<p>handler - method that can change behavior for invoking or send event.</p>
+	<pre>
+		amoeba.use("service").handler("type", handler);
+	</pre>
+	<p>handler need to be a function with interface</p>
+	<pre>
+		function(context, next){}
+	</pre>
+	<p></p>
+
+	<li>before_invoke</li>
+	<li>after_invoke</li>
+	<li>before_event</li>
+
+</section>
+</div>
+
+
+      <!-- FOOTER -->
+      <div class="container">
+      <footer>
+        <p class="pull-right"><a href="#">Back to top</a></p>
+        <p>&copy; 2014 Company, Inc. &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
+      </footer>
+      </div>
+    <!-- Bootstrap core JavaScript -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="js/ie10-viewport-bug-workaround.js"></script>
+  </body>
+</html>
