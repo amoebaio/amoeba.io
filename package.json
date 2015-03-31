@@ -1,0 +1,16 @@
+{
+    "name": "gh-pages-starter",
+    "version": "0.0.1",
+    "description": "Fast start for writting documentation for your project",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "Maksym Pomazan",
+    "license": "MIT",
+    "dependencies": {
+        "assemble": "^0.4.42",
+        "bootstrap": "^3.3.2",
+        "grunt": "^0.4.5"
+    }
+}

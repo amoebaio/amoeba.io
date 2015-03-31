@@ -1,0 +1,89 @@
+---
+title: Index
+active_menu: Docs
+---
+<section>
+	<h1>Amoeba methods</h1>
+
+	<h2>use</h2>
+	Main method in amoeba is "use". It used for setting or getting services.
+	For adding service to amoeba call use method with 2 params. First param name or path to the object. Second param is object to set.
+	<pre>
+	amoeba.use("service_name", object);
+	</pre>
+	After object would be setted you can use get function. Call use with only 1 string param.
+	<pre>
+	amoeba.use("service_name");
+	</pre>
+
+	<h2>server</h2>
+	Server method used for setting or getting server object. For adding server to amoeba call use method with server object as param.
+	<pre>
+	amoeba.server(object);
+	</pre>
+
+	<h1>AmoebaClientHolder methods</h1>
+
+	<h2>invoke</h2>
+	<p>invoke method is used for executing service method. When using invoke method you do not need to worry about what service you use local or remote.
+	<pre>
+	amoeba.use("service_name").invoke("method"[, params, cllback]);
+	</pre>
+	
+	<h3>method</h3>
+	<p>Method is string param. Name of method that would be executed on service object.</p>
+	<h3>params</h3>
+	<p>You can call invoke method in 3 way</p>
+	<ul>
+    <li>without params
+	<pre>
+		amoeba.use("service").invoke("method");// calling service.method();
+		OR
+		amoeba.use("service").invoke("method", callback);// calling service.method(callback);
+	</pre>
+	</li>
+    <li>with single param
+	<pre>
+		amoeba.use("service").invoke("method", 4);// calling service.method(4);
+		OR
+		amoeba.use("service").invoke("method", 4, callback);// calling service.method(4, callback);
+	</pre>
+
+    </li>
+    <li>with multiple param
+		<pre>
+		amoeba.use("service").invoke("method", [4, 5, 6]);// calling service.method(4, 5, 6);
+		OR
+		amoeba.use("service").invoke("method", [4, 5, 6], callback);// calling service.method(4, 5, 6, callback);
+		</pre>
+	</li>
+</ul>
+
+	<h3>callback</h3>
+	<p>Your call back function need to be next interface</p>
+	<pre>
+		function(error, result){}
+	</pre>
+	<p>You can use invoke method without callback param. In this case amoeba will not wait for response from service. It is fast, but will not know about results of calling service.</p>
+
+	<h2>on</h2>
+	<pre>
+	amoeba.use("service").on("event", callback[, added_callback]);
+	</pre>
+	<p>on method is used for adding listener on your service. It can be really powerfull. Thru "on" method server can send events to client in any time not only by request.</p>
+	<h2>handler</h2>
+	<p>handler - method that can change behavior for invoking or send event.</p>
+	<pre>
+		amoeba.use("service").handler("type", handler);
+	</pre>
+	<p>handler need to be a function with interface</p>
+	<pre>
+		function(context, next){}
+	</pre>
+	<p></p>
+
+	<li>before_invoke</li>
+	<li>after_invoke</li>
+	<li>before_event</li>
+
+</section>
