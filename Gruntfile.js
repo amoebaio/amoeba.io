@@ -14,6 +14,19 @@ module.exports = function(grunt) {
                     '.': ['src/pages/*.hbs']
                 }
             },
+            demos: {
+                files: {
+                    '.': ['src/demos/*.hbs']
+                }
+            },
+            docs: {
+                options: {
+                    layout: 'docs.hbs'
+                },
+                files: {
+                    '.': ['src/docs/*.hbs']
+                }
+            },
 
         }
     });

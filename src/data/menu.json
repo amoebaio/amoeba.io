@@ -5,12 +5,9 @@
     "title": "Docs",
     "url": "docs.html"
 }, {
-    "title": "Demo",
+    "title": "Demos",
     "submenu": [{
-        "title": "Simple demo",
-        "url": "demo_simple.html"
-    }, {
-        "title": "Advanced demo",
-        "url": "demo_advanced.html"
+        "title": "Chat demo",
+        "url": "demos_chat.html"
     }]
 }]

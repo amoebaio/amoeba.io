@@ -5,9 +5,19 @@
   height: 500px;
   margin-bottom: 60px;
 }
-/* Since positioning the image, we need to help out the caption */
-.carousel-caption {
-  z-index: 10;
+.fullscreen-item {
+  margin-top: -20px;
+  position: relative;
+  max-height: 316px;
+  overflow: hidden;
+  margin-bottom: 60px;
+}
+
+.fullscreen-item img{
+  width: 100%;
+}
+.fullscreen-item .carousel-caption{
+  top:30px;
 }
 
 /* Declare heights because of positioning of img element */
@@ -20,7 +30,6 @@
   top: 0;
   left: 0;
   min-width: 100%;
-  height: 500px;
 }
 
 

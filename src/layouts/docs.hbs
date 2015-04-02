@@ -1,0 +1,18 @@
+---
+layout: core.hbs
+---
+<div class="container">
+<div class="row">
+	<div class="col-md-2">
+		<div class="list-group">
+	      {{#each docs_menu}}
+          	<a class="list-group-item{{#is ../active_docs_menu title}} active{{/is}}" href="{{url}}">{{title }}</a>
+	      {{/each }}
+		</div>
+	</div>
+	<div class="col-md-10">
+		{{> body }}
+	</div>
+</div>
+</div>
+
