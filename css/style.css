@@ -32,7 +32,9 @@
   min-width: 100%;
 }
 
-
+.carousel-caption {
+  text-shadow: 0px 0px 5px rgba(0,0,0,.6);
+}
 /* MARKETING CONTENT
 -------------------------------------------------- */
 #main_carousel {
@@ -64,4 +66,23 @@
   font-weight: 300;
   line-height: 1;
   letter-spacing: -1px;
+}
+
+
+pre {
+  background-color: #fff;
+  display: block;
+  padding: 0px;
+  margin: 10px 0px 10px 0px;
+  font-size: 13px;
+  line-height: 1.42857143;
+  color: #333;
+  word-break: break-all;
+  word-wrap: break-word;
+  border: 0px;
+  border-radius: 0px;
+}
+
+.featurette-divider {
+  margin: 20px 0;
 }

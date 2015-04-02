@@ -13,6 +13,8 @@
     <!-- Bootstrap core CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/monokai_sublime.css">
+
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -99,13 +101,13 @@
 	<h2>use</h2>
 	Main method in amoeba is "use". It used for setting or getting services.
 	For adding service to amoeba call use method with 2 params. First param name or path to the object. Second param is object to set.
-	<pre>
-	amoeba.use("service_name", object);
-	</pre>
+<pre>
+<code class="javascript">amoeba.use("service_name", object);</code>
+</pre>
 	After object would be setted you can use get function. Call use with only 1 string param.
-	<pre>
-	amoeba.use("service_name");
-	</pre>
+<pre>
+<code class="javascript">amoeba.use("service_name");</code>
+</pre>
 
 	<h2>server</h2>
 	Server method used for setting or getting server object. For adding server to amoeba call use method with server object as param.
@@ -192,6 +194,13 @@
       </div>
     <!-- Bootstrap core JavaScript -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+    <script>
+      hljs.configure({
+
+      });
+      hljs.initHighlightingOnLoad();
+    </script>
     <script src="js/bootstrap.min.js"></script>
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="js/ie10-viewport-bug-workaround.js"></script>

@@ -13,6 +13,8 @@
     <!-- Bootstrap core CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/monokai_sublime.css">
+
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -77,7 +79,7 @@
 <div class="container-fluid">
 	<div class="row">
         <div class="fullscreen-item">
-          <img src="img/art3.jpg" alt="First slide">
+          <img src="img/art6.jpg" alt="First slide">
           <div class="container">
             <div class="carousel-caption">
               <h1>Amoeba can do anything</h1>
@@ -97,25 +99,25 @@
 
     <div class="container">
       <div class="row featurette">
-        <div class="col-md-7">
+        <div class="col-sm-2 hidden-xs">
+          <img class="featurette-image img-responsive" src="img/adv1.png" alt="Generic placeholder image">
+        </div>
+        <div class="col-sm-10">
           <h2 class="featurette-heading">Realtime events</h2>
           <p class="lead">Revolutionary architecture allows to use your web application on full power. Not only request-response. But and events generated on server side.
           <br>
           <a href="#" class="btn btn-default">Read more</a>
           </p>
         </div>
-        <div class="col-md-5">
-          <img class="featurette-image img-responsive" src="img/events.jpg" alt="Generic placeholder image">
-        </div>
       </div>
 
       <hr class="featurette-divider">
 
       <div class="row featurette">
-        <div class="col-md-5">
-          <img class="featurette-image img-responsive" src="img/scalable2.jpg" alt="Generic placeholder image">
+        <div class="col-sm-2 hidden-xs">
+          <img class="featurette-image img-responsive" src="img/adv2.png" alt="Generic placeholder image">
         </div>
-        <div class="col-md-7">
+        <div class="col-sm-10">
           <h2 class="featurette-heading">Easy scalable</h2>
           <p class="lead">Vertical and horizontal scalable has never been so easy</p>
         </div>
@@ -124,12 +126,12 @@
       <hr class="featurette-divider">
 
       <div class="row featurette">
-        <div class="col-md-7">
+        <div class="col-sm-2 hidden-xs">
+          <img class="featurette-image img-responsive"  src="img/adv3.png" alt="Generic placeholder image">
+        </div>
+        <div class="col-sm-10">
           <h2 class="featurette-heading">Security</h2>
           <p class="lead">You can control the application at any level</p>
-        </div>
-        <div class="col-md-5">
-          <img class="featurette-image img-responsive"  src="img/security.jpg" alt="Generic placeholder image">
         </div>
       </div>
 
@@ -145,6 +147,13 @@
       </div>
     <!-- Bootstrap core JavaScript -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+    <script>
+      hljs.configure({
+
+      });
+      hljs.initHighlightingOnLoad();
+    </script>
     <script src="js/bootstrap.min.js"></script>
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="js/ie10-viewport-bug-workaround.js"></script>
