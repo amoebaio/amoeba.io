@@ -18,18 +18,29 @@ describe('Amoeba', function() {
         assert.equal(amoeba.use("test").use("test2").path, "test.test2");
     });
 
-    it('#add', function() {
-        amoeba.use("test").add({
+    it('#as', function() {
+        amoeba.use("test").as({
             "router": "test"
         });
         assert.equal(amoeba.clients.test.router, "test");
     });
 
+    it('#as callback on init', function(done) {
+        amoeba.use("t.*").as({
+            init: function(amoeba, oncomplete){
+                oncomplete(null, {success: true});
+            }
+        }, function(err, result) {
+            assert.ok(result.success);
+            done();
+        });
+    });
+
     it('#add mask', function() {
-        amoeba.use("test.*").add({
+        amoeba.use("test.*").as({
             "test": 0
         });
-        amoeba.use("*").add({
+        amoeba.use("*").as({
             "test": 1
         });
         assert.equal(amoeba.clients['test.*'].test, 0);
@@ -148,7 +159,7 @@ describe('Amoeba', function() {
     });
 
     it('#invoke', function(done) {
-        amoeba.use("test").add({
+        amoeba.use("test").as({
             invoke: function(context, next) {
                 context.response.result = 5;
                 next();
@@ -164,13 +175,13 @@ describe('Amoeba', function() {
     it('#invoke mask', function(done) {
         var counter = 0;
         var total = 2;
-        amoeba.use("*").add({
+        amoeba.use("*").as({
             invoke: function(context, next) {
                 assert.ok(false);
             }
         });
 
-        amoeba.use("test.*").add({
+        amoeba.use("test.*").as({
             invoke: function(context, next) {
                 assert.equal(context.request.path, "test.test");
                 context.response.result = 6;
@@ -186,7 +197,7 @@ describe('Amoeba', function() {
     });
 
     it('#invoke scope test', function(done) {
-        amoeba.use("auth").add({
+        amoeba.use("auth").as({
             scopeTest: function(callback) {
                 return "ok";
             },
@@ -203,7 +214,7 @@ describe('Amoeba', function() {
     });
 
     it('#invoke only method', function(done) {
-        amoeba.use("auth").add({
+        amoeba.use("auth").as({
             invoke: function(context, next) {
                 assert.equal(context.request.method, "test");
                 assert.equal(context.request.path, "auth");
@@ -217,7 +228,7 @@ describe('Amoeba', function() {
     });
 
     it('#invoke method with param', function(done) {
-        amoeba.use("auth").add({
+        amoeba.use("auth").as({
             invoke: function(context, next) {
                 assert.equal(context.request.method, "test");
                 assert.equal(context.request.path, "auth");
@@ -233,7 +244,7 @@ describe('Amoeba', function() {
     });
 
     it('#invoke method with params', function(done) {
-        amoeba.use("auth").add({
+        amoeba.use("auth").as({
             invoke: function(context, next) {
                 assert.equal(context.request.method, "test");
                 assert.equal(context.request.path, "auth");
@@ -248,7 +259,7 @@ describe('Amoeba', function() {
     });
 
     it('#invoke method with callbacks', function(done) {
-        amoeba.use("auth").add({
+        amoeba.use("auth").as({
             invoke: function(context, next) {
                 context.response.result = "ok";
                 assert.equal(context.request.method, "test");
@@ -264,7 +275,7 @@ describe('Amoeba', function() {
     });
 
     it('#invoke method with handlers', function(done) {
-        amoeba.use("auth").add({
+        amoeba.use("auth").as({
             invoke: function(context, next) {
                 context.response.result = 6;
                 next();
@@ -292,5 +303,14 @@ describe('Amoeba', function() {
             done();
         });
     });
+
+    // it('#on path', function(done) {
+    //     amoeba.use("t.*").as(new LocalClient(new Auth()));
+    //     amoeba.use("*").on("*", function() {
+    //         done();
+    //     });
+
+    //     amoeba.use("t.test").invoke("event1");
+    // });
 
 });

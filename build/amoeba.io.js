@@ -28,22 +28,29 @@ Amoeba.prototype.use = function(path) {
     }
 };
 
-Amoeba.prototype.add = function(object, onadded) {
-    if (this.path === null) {
-        throw new Error("Path not set");
-    } else {
-        this.root().clients[this.path] = object;
-        if (object.config) {
-            object.config(this.root(), onadded);
+Amoeba.prototype.as = function() {
+    if (this.path) {
+        this.root().clients[this.path] = arguments[0];
+        if (arguments[0].init) {
+            arguments[0].init(this, arguments[1]);
+        } else {
+            if (arguments[1]) {
+                arguments[1](null, {
+                    success: true
+                });
+            }
         }
-
+        return this;
+    } else {
+        throw new Error("Path not found");
     }
-    return this;
+
 };
 
 Amoeba.prototype.on = function() {
     if (this.parent) {
-        this.root().on(this.path, arguments[0], arguments[1]);
+        Array.prototype.unshift.call(arguments, this.path);
+        this.on.apply(this.root(), arguments);
     } else {
         EventEmitter.prototype.on.call(this, arguments[1] + ":" + arguments[0], arguments[2]);
     }
@@ -51,7 +58,8 @@ Amoeba.prototype.on = function() {
 };
 
 Amoeba.prototype.emit = function() {
-
+    var delimiter = ":";
+    var path_delimiter = ".";
     if (this.parent) {
         this.root().emit(this.path, arguments[0], arguments[1]);
     } else {
@@ -59,17 +67,17 @@ Amoeba.prototype.emit = function() {
         var event = arguments[1];
         var data = arguments[2];
 
-        EventEmitter.prototype.emit.call(this, event + ":" + path, data);
-        EventEmitter.prototype.emit.call(this, "*:" + path, data);
+        EventEmitter.prototype.emit.call(this, event + delimiter + path, data, path);
+        EventEmitter.prototype.emit.call(this, "*" + delimiter + path, data, path);
 
-        var parts = path.split('.');
+        var parts = path.split(path_delimiter);
 
         for (var i = parts.length; i >= 0; i--) {
             var res = parts.slice(0, i);
             res.push("*");
 
-            EventEmitter.prototype.emit.call(this, event + ":" + res.join("."), data);
-            EventEmitter.prototype.emit.call(this, "*:" + res.join("."), data);
+            EventEmitter.prototype.emit.call(this, event + delimiter + res.join(path_delimiter), data, path);
+            EventEmitter.prototype.emit.call(this, "*" + delimiter + res.join(path_delimiter), data, path);
         }
     }
     return this;
