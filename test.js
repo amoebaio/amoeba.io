@@ -4,7 +4,7 @@ QUnit.test("Invoke scope test", function(assert) {
     assert.expect(1);
 
     var amoeba = new Amoeba();
-    amoeba.use("auth").as({
+    amoeba.path("auth").as({
         scopeTest: function() {
             return "ok";
         },
@@ -13,7 +13,7 @@ QUnit.test("Invoke scope test", function(assert) {
             next();
         }
     });
-    amoeba.use("auth").invoke("test", {
+    amoeba.path("auth").invoke("test", {
         p1: 1,
         p2: 2
     }, function(err, data) {
@@ -28,7 +28,7 @@ QUnit.test("Invoke only method", function(assert) {
     var done = assert.async();
     assert.expect(4);
     var amoeba = new Amoeba();
-    amoeba.use("auth").as({
+    amoeba.path("auth").as({
         invoke: function(context, next) {
             assert.equal(context.request.method, "test");
             assert.equal(context.request.path, "auth");
@@ -38,7 +38,7 @@ QUnit.test("Invoke only method", function(assert) {
             done();
         }
     });
-    amoeba.use("auth").invoke("test");
+    amoeba.path("auth").invoke("test");
 });
 
 QUnit.test("Invoke method with param", function(assert) {
@@ -46,7 +46,7 @@ QUnit.test("Invoke method with param", function(assert) {
     assert.expect(4);
     var amoeba = new Amoeba();
 
-    amoeba.use("auth").as({
+    amoeba.path("auth").as({
         invoke: function(context, next) {
             assert.equal(context.request.method, "test");
             assert.equal(context.request.path, "auth");
@@ -56,7 +56,7 @@ QUnit.test("Invoke method with param", function(assert) {
             done();
         }
     });
-    amoeba.use("auth").invoke("test", {
+    amoeba.path("auth").invoke("test", {
         "p1": "p2"
     });
 });
@@ -66,7 +66,7 @@ QUnit.test("Invoke method with params", function(assert) {
     assert.expect(4);
     var amoeba = new Amoeba();
 
-    amoeba.use("auth").as({
+    amoeba.path("auth").as({
         invoke: function(context, next) {
             assert.equal(context.request.method, "test");
             assert.equal(context.request.path, "auth");
@@ -76,7 +76,7 @@ QUnit.test("Invoke method with params", function(assert) {
             done();
         }
     });
-    amoeba.use("auth").invoke("test", [1, 2, 3]);
+    amoeba.path("auth").invoke("test", [1, 2, 3]);
 });
 
 
@@ -84,7 +84,7 @@ QUnit.test("Invoke method with callbacks", function(assert) {
     var done = assert.async();
     assert.expect(4);
     var amoeba = new Amoeba();
-    amoeba.use("auth").as({
+    amoeba.path("auth").as({
         invoke: function(context, next) {
             assert.equal(context.request.method, "test");
             assert.equal(context.request.path, "auth");
@@ -93,7 +93,7 @@ QUnit.test("Invoke method with callbacks", function(assert) {
             next();
         }
     });
-    amoeba.use("auth").invoke("test", function(err, data) {
+    amoeba.path("auth").invoke("test", function(err, data) {
         assert.equal(data, "ok");
         done();
     });
@@ -104,7 +104,7 @@ QUnit.test("Amoeba invoke", function(assert) {
 
     var amoeba = new Amoeba();
 
-    amoeba.use("auth").as({
+    amoeba.path("auth").as({
         invoke: function(context, next) {
             assert.equal(context.request.params.p2, 2);
             assert.equal(context.request.method, "test");
@@ -117,13 +117,13 @@ QUnit.test("Amoeba invoke", function(assert) {
             next();
         }
     });
-    amoeba.use("auth").invoke("test", {
+    amoeba.path("auth").invoke("test", {
         p1: 1,
         p2: 2
     }, function(err, data) {
         assert.equal(data, "ok");
     });
-    amoeba.use("auth").invoke("test", {
+    amoeba.path("auth").invoke("test", {
         p1: 2,
         p2: 2
     }, function(err, data) {
