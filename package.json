@@ -1,7 +1,7 @@
 {
   "name": "amoeba.io",
   "version": "0.1.0",
-  "description": "Distributed, modular request/responce/event system",
+  "description": "Request/Responce/Event communication system",
   "main": "index.js",
   "repository": {
     "type": "git",
@@ -11,14 +11,14 @@
     "test": "test"
   },
   "dependencies": {
-    "chaining-tool": "0.0.3"
+    "chaining-tool": "0.0.4"
   },
   "devDependencies": {
     "grunt": "^0.4.5",
+    "grunt-browserify": "^3.4.0",
     "grunt-contrib-jshint": "~0.10.0",
     "grunt-contrib-nodeunit": "~0.4.1",
-    "grunt-contrib-uglify": "~0.5.0",
-    "grunt-browserify": "^3.4.0"
+    "grunt-contrib-uglify": "~0.5.0"
   },
   "scripts": {
     "test": "mocha"
@@ -36,14 +36,8 @@
     "name": "Maksym Pomazan"
   },
   "license": "MIT",
-  "readme": "#Amoeba\r\n\r\n##About\r\n\r\n\r\n##Instalation\r\n\r\n```npm install amoeba.io```\r\n\r\n##Usage\r\n###Socket client-server application\r\nInstall modules\r\n```\r\nnpm install socket.io amoeba.io amoeba.io-local-client amoeba.io-socket-server \r\n```\r\nCreate server\r\n```javascript\r\n//File server.js\r\nvar ServerIO = require('socket.io');\r\nvar Amoeba = require(\"amoeba.io\");\r\nvar LocalClient = require(\"amoeba.io-local-client\");\r\nvar SocketServer = require(\"amoeba.io-socket-server\");\r\n//Service class\r\nAuth = function() {};\r\n\r\nAuth.prototype.login = function(data, callback) {\r\n    if (data.login == \"admin\" && data.password == \"pass\") {\r\n        callback(null, {\r\n            \"res\": \"login ok\"\r\n        });\r\n    } else {\r\n        callback({\r\n            \"res\": \"login fail\"\r\n        }, null);\r\n    }\r\n};\r\n\r\n//Create amoeba instance\r\namoeba = new Amoeba();\r\n//Add service to amoeba\r\namoeba.service(\"auth\", new LocalClient(new Auth()));\r\n\r\n//Create socket server\r\nvar port = \"8090\";\r\nio = new ServerIO();\r\nio.listen(port).on('connection', function(socket) {\r\n  //All services now you can use thru socket \r\n  amoeba.server(new SocketServer(socket));\r\n});\r\n```\r\nStart server\r\n```\r\nnode server\r\n```\r\n\r\nCreate client\r\n```html\r\n<!DOCTYPE html>\r\n<html>\r\n\r\n<head>\r\n    <title>Browser Amoeba test</title>\r\n    <meta charset=\"utf-8\">\r\n\r\n    <link rel=\"stylesheet\" href=\"http://code.jquery.com/qunit/qunit-1.17.1.css\">\r\n\r\n    <script type=\"text/javascript\" src=\"js/socket.io.js\"></script>\r\n    <script type=\"text/javascript\" src=\"js/amoeba.io.min.js\"></script>\r\n    <script type=\"text/javascript\" src=\"js/amoeba.io-socket-client.js\"></script>\r\n    <script type=\"text/javascript\">\r\n      var socket = io('http://localhost:8090');\r\n      var amoeba = new Amoeba();\r\n      socket.on('connect', function() {\r\n        amoeba.service(\"auth\", new SocketClient(socket));\r\n        amoeba.service(\"auth\").invoke(\"login\", {\r\n                login: 'admin',\r\n                password: 'pass'\r\n            }, function(err, data) {\r\n              //Do somethong\r\n            });\r\n      }\r\n    </script>\r\n</head>\r\n\r\n<body>\r\n</body>\r\n\r\n</html>\r\n```\r\n",
   "readmeFilename": "readme.md",
-  "gitHead": "ce26dff217095b279d261f7844f1e46d1bdabc2e",
   "bugs": {
     "url": "https://github.com/amoebaio/amoeba.io/issues"
-  },
-  "homepage": "https://github.com/amoebaio/amoeba.io",
-  "_id": "amoeba.io@0.0.11",
-  "_shasum": "13cf54a8308b9df875dbe474ddadf7cbcdc451d5",
-  "_from": "amoeba.io@^0.0.11"
+  }
 }
