@@ -5,79 +5,63 @@ active_docs_menu: Get started
 ---
 <section>
 	<h1>Get started</h1>
+	<h2>Simple socket client-server application</h2>
+	<h3>Server</h3>
+	1. Install amoeba and modules
+	<pre><code class="bash">npm install amoeba.io amoeba.io-local-client amoeba.io-socket-server</code></pre>
+	2. Create server.js
+	<pre><code class="javascript">var Amoeba = require("amoeba.io");
+var LocalClient = require("amoeba.io-local-client");
+var SocketServer = require("amoeba.io-socket-server");
 
-	<h2>1. Installation</h2>
-
-	<pre><code class="javascript">npm install amoeba.io</code></pre>
-
-	<h2>2. Configure</h2>
-	<p>Configuration occurs via "add" method</p>
-	<pre><code class="javascript">amoeba.add([route,] object [,callback])</code></pre>
-	<p>route - path refers to an object</p>
-	<p>object - can be both client and server. If route params exists (string) it will be client otherwise server</p>
-	<p>callback - function that will be called when server or client is ready for use or error happens</p>
-	<p>Example:</p>
-	<pre><code class="javascript">amoeba.add("chat", new LocalService(new Chat()), function(err){
-	if(!err){
-		//Client ready
-		amoeba.add(new SocketServer("8081"), function(err){
-			if(!err){
-				//Server ready
-			}
-		});
-	}
+var amoeba = new Amoeba();
+amoeba.path("chat").as(new LocalClient({
+    test: function(param, callback) {
+    	callback(null, "complete");
+    }
+}));
+new SocketServer(amoeba, {
+    port: "8090"
 });</code></pre>
+	3. Run server
+	<pre><code class="bash">node server</code></pre>
 
-	<h2>3. Usage</h2>
-<p>Amoeba has next methods</p>
+	<h3>Browser client</h3>
+	1. Download 
+	<pre><code class="bash">bower install amoeba.io amoeba.io-socket-client</code></pre>
+	or
+	<pre><code class="bash">npm install amoeba.io amoeba.io-socket-client</code></pre>
+	2. Create index.html
+	<pre><code class="html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
 
-amoeba
-------
-public function
-add
-use
+&lt;head&gt;
+    &lt;title&gt;Client&lt;/title&gt;
+    &lt;script type="text/javascript" src="bower_components/amoeba.io/build/amoeba.io.min.js"&gt;&lt;/script&gt;
+    &lt;script type="text/javascript" src="bower_components/amoeba.io-socket-client/build/amoeba.io-socket-client.min.js"&gt;&lt;/script&gt;
+    &lt;script type="text/javascript"&gt;
+    var amoeba = new Amoeba();
+    amoeba.path("chat").as(new SocketClient({
+        url: "http://localhost:8090"
+    }), function(err) {
+        if (!err) {
+            //client connected
+            amoeba.path("chat").invoke('test', { //call test
+                hey: "test"
+            }, function(err, result) { //get result
+                console.log(result);
+            });
+        }
+    });
+    &lt;/script&gt;
+&lt;/head&gt;
 
-_private function
-on
-emit
+&lt;body&gt;
 
-proxy
------
-invoke
+&lt;/body&gt;
 
-on
-once
-off
-
-handler
-
-
-	<h3>Masks</h3>
-	<p>You can use mask when call use method in Amoeba. For example if you add your service next way</p>
-	<pre><code class="javascript">amoeba.add("chat.*", new LocalService(new Chat()))</code></pre>
-	all "invoke" calls start with "chat." will be routed to chat local service
-	<pre><code class="javascript">amoeba.use("chat.room.6").invoke("add", {message: "Hello world"})</code></pre>
-	You can not call "invoke" using mask
-	<pre><code class="javascript">amoeba.use("chat.*").invoke("add", {message: "Hello world"}); //ERROR HERE</code></pre>
-	But you can call "on" using mask
-	<pre><code class="javascript">amoeba.use("chat.*").on("add", function(event, data){});
-//THE SAME AS
-amoeba.on("add:chat.*", function(event, data){});</code></pre>
-	<p>It means that all "add" events in all services started with "chat" will call your function. </p>
-	<pre><code class="javascript">chat
-chat.rooms
-chat.rooms.1
-chat.rooms.2
-chat.very.long.path
-chat.etc
-</code></pre>
-	<p class="text-danger">Event name can use period "." but can`t colon ":"</p>
-
-
-obj.on('event.mask', handler, callback_with_id);
-once();
-off(id);
-obj.emit('event.without.mask', event_data);
+&lt;/html&gt;</code></pre>
+	3. Open in browser
 
 
 </section>
