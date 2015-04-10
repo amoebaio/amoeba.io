@@ -58,7 +58,7 @@
 ------------------------- */
 
 .featurette-divider {
-  margin: 80px 0; /* Space out the Bootstrap <hr> more */
+  margin: 60px 0; /* Space out the Bootstrap <hr> more */
 }
 
 /* Thin out the marketing headings */
@@ -83,6 +83,3 @@ pre {
   border-radius: 0px;
 }
 
-.featurette-divider {
-  margin: 20px 0;
-}

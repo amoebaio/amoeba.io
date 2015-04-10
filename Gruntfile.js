@@ -2,6 +2,14 @@ module.exports = function(grunt) {
     // Project configuration.
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
+        jsdoc: {
+            dist: {
+                src: ['../amoeba.io/lib/*.js'],
+                options: {
+                    destination: 'api'
+                }
+            }
+        },
         assemble: {
             options: {
                 layout: "default.hbs",
@@ -31,5 +39,7 @@ module.exports = function(grunt) {
         }
     });
     grunt.loadNpmTasks('assemble');
-    grunt.registerTask('default', ['assemble']);
+    grunt.loadNpmTasks('grunt-jsdoc');
+
+    grunt.registerTask('default', ['jsdoc', 'assemble']);
 };
