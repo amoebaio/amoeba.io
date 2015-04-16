@@ -41,7 +41,7 @@ QUnit.test("Invoke only method", function(assert) {
     amoeba.path("auth").invoke("test");
 });
 
-QUnit.test("Invoke method with param", function(assert) {
+QUnit.test("Invoke method with argument", function(assert) {
     var done = assert.async();
     assert.expect(4);
     var amoeba = new Amoeba();
@@ -50,7 +50,7 @@ QUnit.test("Invoke method with param", function(assert) {
         invoke: function(context, next) {
             assert.equal(context.request.method, "test");
             assert.equal(context.request.path, "auth");
-            assert.equal(context.request.params.p1, "p2");
+            assert.deepEqual(context.request.arguments[0], {"p1": "p2"});
             assert.equal(typeof(context.response), "undefined");
             next();
             done();
@@ -61,7 +61,7 @@ QUnit.test("Invoke method with param", function(assert) {
     });
 });
 
-QUnit.test("Invoke method with params", function(assert) {
+QUnit.test("Invoke method with arguments", function(assert) {
     var done = assert.async();
     assert.expect(4);
     var amoeba = new Amoeba();
@@ -70,13 +70,13 @@ QUnit.test("Invoke method with params", function(assert) {
         invoke: function(context, next) {
             assert.equal(context.request.method, "test");
             assert.equal(context.request.path, "auth");
-            assert.equal(context.request.params.length, 3);
+            assert.equal(context.request.arguments.length, 3);
             assert.equal(typeof(context.response), "undefined");
             next();
             done();
         }
     });
-    amoeba.path("auth").invoke("test", [1, 2, 3]);
+    amoeba.path("auth").invoke("test", 1, 2, 3);
 });
 
 
@@ -106,10 +106,10 @@ QUnit.test("Amoeba invoke", function(assert) {
 
     amoeba.path("auth").as({
         invoke: function(context, next) {
-            assert.equal(context.request.params.p2, 2);
+            assert.equal(context.request.arguments[0].p2, 2);
             assert.equal(context.request.method, "test");
             assert.equal(context.request.path, "auth");
-            if (context.request.params.p1 == 1) {
+            if (context.request.arguments[0].p1 == 1) {
                 context.response.result = "ok";
             } else {
                 context.response.error = "error";

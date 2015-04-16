@@ -52,7 +52,7 @@ describe('Amoeba', function() {
     it('#on emit', function(done) {
         var counter = 0;
         var total = 4;
-        amoeba.on("test.test", "ev", function(data) {
+        amoeba.on("ev", "test.test", function(data) {
             assert.equal(data.test, 1);
             counter = counter + 1;
             if (counter == total) {
@@ -66,7 +66,7 @@ describe('Amoeba', function() {
                 done();
             }
         });
-        amoeba.emit("test.test", "ev", {
+        amoeba.emit("ev", "test.test", {
             "test": 1
         });
         amoeba.path("test.test").emit("ev", {
@@ -85,28 +85,28 @@ describe('Amoeba', function() {
                 done();
             }
         });
-        amoeba.on("test.test", "ev", function() {
+        amoeba.on("ev", "test.test", function() {
             assert.ok(true);
             counter = counter + 1;
             if (counter == total) {
                 done();
             }
         });
-        amoeba.on("test.test", "*", function() {
+        amoeba.on("*", "test.test", function() {
             assert.ok(true);
             counter = counter + 1;
             if (counter == total) {
                 done();
             }
         });
-        amoeba.on("*", "ev", function() {
+        amoeba.on("ev", "*", function() {
             assert.ok(true);
             counter = counter + 1;
             if (counter == total) {
                 done();
             }
         });
-        amoeba.on("test.*", "ev", function() {
+        amoeba.on("ev", "test.*", function() {
             assert.ok(true);
             counter = counter + 1;
             if (counter == total) {
@@ -114,11 +114,11 @@ describe('Amoeba', function() {
             }
         });
 
-        amoeba.on("tests.*", "ev", function() {
+        amoeba.on("ev", "tests.*", function() {
             assert.ok(false);
         });
 
-        amoeba.emit("test.test", "ev", {
+        amoeba.emit("ev", "test.test", {
             "test": 1
         });
 
@@ -162,13 +162,13 @@ describe('Amoeba', function() {
     it('#invoke', function(done) {
         amoeba.path("test").as({
             invoke: function(context, next) {
-                context.response.result = 5;
+                context.response.result = context.request.arguments[0] + context.request.arguments[1] + context.request.arguments[2];
                 next();
             }
         });
-        amoeba.path("test").invoke("method", [1, 2, 3], function() {
+        amoeba.path("test").invoke("method", 1, 3, 3, function() {
             assert.equal(arguments[0], null);
-            assert.equal(arguments[1], 5);
+            assert.equal(arguments[1], 7);
             done();
         });
     });
@@ -185,12 +185,12 @@ describe('Amoeba', function() {
         amoeba.path("test.*").as({
             invoke: function(context, next) {
                 assert.equal(context.request.path, "test.test");
-                context.response.result = 6;
+                context.response.result = context.request.arguments[0] + context.request.arguments[1] + context.request.arguments[2];
                 next();
             }
         });
 
-        amoeba.path("test.test").invoke("method", [1, 2, 3], function() {
+        amoeba.path("test.test").invoke("method", 1, 2, 3, function() {
             assert.equal(arguments[0], null);
             assert.equal(arguments[1], 6);
             done();
@@ -220,7 +220,7 @@ describe('Amoeba', function() {
                 assert.equal(context.request.method, "test");
                 assert.equal(context.request.path, "auth");
                 assert.equal(typeof(context.response), "undefined");
-                assert.equal(typeof(context.request.params), "undefined");
+                assert.equal(context.request.arguments.length, 0);
                 next();
                 done();
             }
@@ -233,7 +233,10 @@ describe('Amoeba', function() {
             invoke: function(context, next) {
                 assert.equal(context.request.method, "test");
                 assert.equal(context.request.path, "auth");
-                assert.equal(context.request.params.p1, "p2");
+                assert.equal(context.request.arguments.length, 1);
+                assert.deepEqual(context.request.arguments[0], {
+                    "p1": "p2"
+                });
                 assert.equal(typeof(context.response), "undefined");
                 next();
                 done();
@@ -249,14 +252,14 @@ describe('Amoeba', function() {
             invoke: function(context, next) {
                 assert.equal(context.request.method, "test");
                 assert.equal(context.request.path, "auth");
-                assert.equal(context.request.params[0], "1");
-                assert.equal(context.request.params[1], "2");
-                assert.equal(context.request.params[2], "3");
+                assert.equal(context.request.arguments[0], "1");
+                assert.equal(context.request.arguments[1], "2");
+                assert.equal(context.request.arguments[2], "3");
                 assert.equal(typeof(context.response), "undefined");
                 done();
             }
         });
-        amoeba.path("auth").invoke("test", ["1", "2", "3"]);
+        amoeba.path("auth").invoke("test", "1", "2", "3");
     });
 
     it('#invoke method with callbacks', function(done) {
@@ -265,7 +268,7 @@ describe('Amoeba', function() {
                 context.response.result = "ok";
                 assert.equal(context.request.method, "test");
                 assert.equal(context.request.path, "auth");
-                assert.equal(typeof(context.request.params), "undefined");
+                assert.equal(context.request.arguments.length, 0);
                 next();
             }
         });
@@ -304,14 +307,5 @@ describe('Amoeba', function() {
             done();
         });
     });
-
-    // it('#on path', function(done) {
-    //     amoeba.path("t.*").as(new LocalClient(new Auth()));
-    //     amoeba.path("*").on("*", function() {
-    //         done();
-    //     });
-
-    //     amoeba.path("t.test").invoke("event1");
-    // });
 
 });
