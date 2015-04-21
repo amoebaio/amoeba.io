@@ -16,54 +16,85 @@ title: Index
 	</div>
 </div>
 
+<div class="container">
+  <div class="row">
+    <div class="col-md-6"><h2>Server</h2>
+  <pre><code class="javascript">var Amoeba = require("amoeba.io");
+var AmoebaLocalClient = require("amoeba.io-local-client");
+var AmoebaSocketServer = require("amoeba.io-socket-server");
 
+function Cube() {}
 
-    <!-- Marketing messaging and featurettes
-    ================================================== -->
-    <!-- Wrap the rest of the page in another container to center all the content. -->
+Cube.prototype.move = function(x, y) {
+    this.emit("moved", {
+        x: x,
+        y: y
+    });
+};
 
-    <div class="container">
-      <div class="row featurette">
-        <div class="col-sm-2 hidden-xs">
-        	<span class="octicon octicon-big octicon-zap"></span>
-<!--           <img class="featurette-image img-responsive" src="img/adv1.png" alt="Generic placeholder image"> -->
-        </div>
-        <div class="col-sm-10">
-          <h2 class="featurette-heading">Realtime events</h2>
-          <p class="lead">Revolutionary architecture allows to use the application on full power
-          <p><a href="#" class="btn btn-default">Read more</a></p>
-          </p>
-        </div>
-      </div>
+var amoeba = new Amoeba();
+amoeba.path("cube").as(new AmoebaLocalClient(new Cube()));
 
-      <hr class="featurette-divider">
+new AmoebaSocketServer(amoeba, {
+    port: "8092"
+});</code></pre>
+    </div>
+    <div class="col-md-6"><h2>Client</h2>
+    <pre><code class="javascript">var amoeba = new Amoeba();
+amoeba.path("cube").as(new SocketClient({
+    url: "http://localhost:8092"
+}), function(err, result) {
+    if (err) return; //eror here
+    //listen event "moved"
+    amoeba.path("cube").on("moved", function(data, event, path) {
+        $('.cube').css({
+            "top": data.y,
+            "left": data.x
+        });
+    });
+    // set cube draggable
+    $(".cube").draggable({
+        drag: function(event, ui) {
+            var pos = ui.position;
+            amoeba.path("cube").invoke('move', pos.left, pos.top);
+        }
+    });
+});</code></pre>
+    </div>
+  </div>
+  <h2>Result</h2>
+  <div class="row well" style="height:300px; position: relative;">
+      <div class="cube" style="width: 100px;height: 100px;position: relative;background-color: orange;"></div>
+  </div>
+  <script type="text/javascript">
+$(document).ready(function(){
+var amoeba = new Amoeba();
+amoeba.path("cube").as(new SocketClient({
+    url: "http://incakit.com:8092"
+}), function(err, result) {
+    if (err) {
+        //eror here
+        return;
+    }
+    
+    //listen event "moved"
+    amoeba.path("cube").on("moved", function(data, event, path) {
+        $('.cube').css({
+            "top": data.y,
+            "left": data.x
+        });
+    });
+    
+    // set cube draggable
+    $(".cube").draggable({
+        containment: "parent",
+        drag: function(event, ui) {
+            var pos = ui.position;
+            amoeba.path("cube").invoke('move', pos.left, pos.top);
+        }
+    });
 
-      <div class="row featurette">
-        <div class="col-sm-2 hidden-xs">
-			<span class="octicon octicon-big octicon-repo-forked"></span>
-          <!-- <img class="featurette-image img-responsive" src="img/adv2.png" alt="Generic placeholder image"> -->
-        </div>
-        <div class="col-sm-10">
-          <h2 class="featurette-heading">Easy scalable</h2>
-          <p class="lead">Vertical and horizontal scaling has never been so easy</p>
-          <p><a href="#" class="btn btn-default">Read more</a></p>
-        </div>
-      </div>
-
-      <hr class="featurette-divider">
-
-      <div class="row featurette">
-        <div class="col-sm-2 hidden-xs">
-        	<span class="octicon octicon-big octicon-eye"></span>
-<!--           <img class="featurette-image img-responsive"  src="img/adv3.png" alt="Generic placeholder image"> -->
-        </div>
-        <div class="col-sm-10">
-          <h2 class="featurette-heading">Security and Control</h2>
-          <p class="lead">You can control the application at any level</p>
-          <p><a href="#" class="btn btn-default">Read more</a></p>
-        </div>
-      </div>
-
-      <hr class="featurette-divider">
-
-      <!-- /END THE FEATURETTES -->
+});  
+});
+  </script>
+</div>
